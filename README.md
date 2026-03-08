@@ -1,74 +1,142 @@
-# React + TypeScript + Vite
+# 🧟 Apocalypse
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A 3D multiplayer zombie survival game built with React Three Fiber, Rapier physics, and Solana blockchain integration. Fight zombies, collect weapons, and battle other players in a post-apocalyptic world.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## React Compiler
+- **Singleplayer Survival** — Wave-based zombie spawning with dynamic AI, combat, and health system
+- **Multiplayer** — Real-time WebSocket multiplayer with player syncing via a Node.js server
+- **Characters** — 4 playable characters (Lis, Matt, Sam, Shaun) with dual-weapon variants and companion pets (German Shepherd, Pug)
+- **Weapons** — 7 weapons: Pistol, Rifle, SMG, Axe, Knife, Spear, Guitar — each with unique stats
+- **Zombies** — 4 zombie variants (Basic, Chubby, Ribcage, Arm) with physics-based combat
+- **Atmosphere System** — Dynamic 24-hour day/night cycle with dread lighting and post-processing effects
+- **Minimap** — Real-time overhead minimap showing player and zombie positions
+- **Solana Integration** — Wallet connection, on-chain profile, session keys via Magicblock ephemeral rollups
+- **Inventory System** — In-game inventory and character selection screen
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Layer | Technology |
+|---|---|
+| Rendering | [React Three Fiber](https://github.com/pmndrs/react-three-fiber) + [Three.js](https://threejs.org) |
+| Physics | [@react-three/rapier](https://github.com/pmndrs/react-three-rapier) |
+| Post-processing | [@react-three/postprocessing](https://github.com/pmndrs/react-postprocessing) |
+| 3D Helpers | [@react-three/drei](https://github.com/pmndrs/drei) |
+| State | [Zustand](https://github.com/pmndrs/zustand) |
+| Routing | React Router v7 |
+| Blockchain | [@solana/web3.js](https://github.com/solana-labs/solana-web3.js), [@coral-xyz/anchor](https://github.com/coral-xyz/anchor) |
+| Rollups | [Magicblock Ephemeral Rollups SDK](https://github.com/magicblock-labs) |
+| Multiplayer | Node.js + Express + WebSocket (`ws`) |
+| Build | Vite + TypeScript |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 📁 Project Structure
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+Apocalypse/
+├── src/
+│   ├── components/
+│   │   ├── Characters/          # Playable character GLTF components
+│   │   ├── Zombies/             # Zombie variants + spawner
+│   │   ├── Character.tsx        # Main character controller
+│   │   ├── Experience.tsx       # Main scene
+│   │   ├── Map.tsx              # Game world / environment
+│   │   ├── UI.tsx               # Full game HUD & menus
+│   │   ├── Multiplayer.tsx      # Remote player manager
+│   │   ├── AtmosphereEffects.tsx # Day/night + lighting
+│   │   ├── Minimap.tsx          # Overhead minimap
+│   │   └── ...
+│   ├── hooks/
+│   │   ├── useSocket.ts         # WebSocket multiplayer hook
+│   │   ├── useBattle.ts         # On-chain battle hook
+│   │   ├── useProfile.ts        # Solana profile hook
+│   │   └── useGameProgram.ts    # Anchor program hook
+│   ├── config/
+│   │   ├── GameConfig.ts        # Weapon stats, character config
+│   │   └── EnvironmentConfig.ts # Scene environment settings
+│   ├── store.ts                 # Global Zustand game state
+│   └── App.tsx                  # Routes & canvas setup
+├── public/
+│   ├── models/                  # Optimized .glb character models
+│   ├── weapons/                 # Weapon GLTF models
+│   └── environement/            # Environment prop GLTFs
+├── node-server/                 # WebSocket multiplayer server
+└── apocalypse-contracts/        # Solana smart contracts (Anchor)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🎮 Controls
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Key | Action |
+|---|---|
+| `W A S D` / Arrow Keys | Move |
+| `Space` | Jump |
+| `Shift` | Sprint |
+| `1` – `0` | Switch weapon slot |
+| `Y` | Call pet |
+| `G` | Pet your companion |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+
+- npm or bun
+
+### Install & Run
+
+```bash
+# Clone the repo
+git clone https://github.com/PIYUSH-NAYAK/Apocalypse.git
+cd Apocalypse
+
+# Install dependencies
+npm install
+
+# Start the frontend
+npm run dev
 ```
-# apocalypse
+
+### Run the Multiplayer Server
+
+```bash
+cd node-server
+npm install
+npm run dev
+```
+
+The WebSocket server runs on `ws://localhost:PORT/ws` by default.
+
+---
+
+## 🗺️ Routes
+
+| Route | Description |
+|---|---|
+| `/` | Default scene (level 3) |
+| `/singleplayer` | Singleplayer survival mode |
+| `/multiplayer` | Multiplayer lobby & battle |
+| `/inventory` | Character & inventory screen |
+| `/scene1` – `/scene5` | Individual game scenes |
+
+---
+
+## ⛓️ Solana / Blockchain
+
+- Wallet connection via `@solana/wallet-adapter`
+- On-chain player profiles stored via Anchor program
+- Session-based gasless transactions using **Magicblock Ephemeral Rollups**
+- Smart contracts located in `apocalypse-contracts/`
+
+---
+
+## 📜 License
+
+MIT
